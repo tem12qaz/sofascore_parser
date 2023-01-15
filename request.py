@@ -64,8 +64,8 @@ class Request:
                     resp = await session.get(
                         url=url,
                         headers=HEADERS,
-                        proxy='https://RsxBk6:VvyEC@45.10.250.252:8000/',
-                        # proxy_auth=proxy_auth
+                        proxy='http://45.10.250.252:8000',
+                        proxy_auth=proxy_auth
                     )
                     resp = await resp.json()
 
