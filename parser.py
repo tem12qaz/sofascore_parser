@@ -94,7 +94,8 @@ class Parser:
     async def parse_loop(self):
         try:
             while self.last_recorded_day > self.last_day_str:
-                for i in range(20):
+                for i in range(15):
+                    print('---')
                     request: Request = self.request_init(self, self.datetime)
                     self.loop.create_task(self.parse_and_write_day(request))
                     self.previous_day()
