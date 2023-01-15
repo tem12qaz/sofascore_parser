@@ -80,7 +80,7 @@ class Parser:
         print(
             f'''{Colors.OKGREEN}DAYS:{Colors.ENDC} {self.days}
 {Colors.OKCYAN}EVENTS:{Colors.ENDC} {self.events}
-{Colors.OKCYAN}EVENTS IN BASE:{Colors.ENDC} {await EventModel.all().count()}
+{Colors.OKCYAN}EVENTS IN BASE:{Colors.ENDC} {await EventModel.all()}
               
 {Colors.WARNING}NO_ODDS:{Colors.ENDC} {self.no_odds}
 {Colors.WARNING}NO_VOICES:{Colors.ENDC} {self.no_voices} 
