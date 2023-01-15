@@ -73,8 +73,6 @@ class Request:
                     raise ConnectionError
                 await asyncio.sleep(3)
                 errors += 1
-                print(traceback.format_exc())
-
                 continue
             else:
                 return resp
@@ -92,6 +90,7 @@ class Request:
         try:
             self.info = await self.get_info()
             self.odds = await self.get_odds()
+            print('-----')
         except ConnectionError:
             return False
         else:
