@@ -55,8 +55,6 @@ class Request:
     async def make_request(self, url: str) -> dict:
         errors = 0
         while True:
-            print('-----')
-
             try:
                 proxy_auth = aiohttp.BasicAuth('RsxBk6', 'VvyEC')
 
@@ -77,6 +75,8 @@ class Request:
                 errors += 1
                 continue
             else:
+                print('-----')
+
                 return resp
 
     async def get_info(self) -> dict:
