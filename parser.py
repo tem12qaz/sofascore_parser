@@ -45,7 +45,7 @@ class Parser:
     def write_day(self, day: list[Event]):
         row_num = 1
         for event in day:
-            print(self.log(str(event.__dict__)))
+            print(self.log(str(list(event.__dict__.values()))))
             col_num = 0
             for col in tuple(event.__dict__.values()):
                 if type(col) == Empty:
@@ -69,12 +69,11 @@ class Parser:
             f'''DAYS: {self.days} EVENTS: {self.events} NO_ODDS: {self.no_odds} NO_VOICES: {self.no_voices} ERRORS: {self.errors} REQUEST_ERRORS: {self.request_errors}
             
 {self.last_recorded_day} RECORDED
-            
+
+LAST RECORDED INFO:    
 {additional}
 '''
-
-
-        )
+)
 
     async def parse_loop(self):
         try:
