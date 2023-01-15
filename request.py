@@ -142,6 +142,9 @@ class Request:
         # events = []
         for data in self.info['events']:
             try:
+                if await EventModel.get_or_none(event_id=str(data['id'])):
+                    self.parser.events += 1
+                    continue
                 odds = self.odds['odds']
 
                 odds = odds.get(str(data['id']))
