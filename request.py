@@ -1,7 +1,7 @@
 import asyncio
 import traceback
 from datetime import datetime
-from typing import Self
+# from typing import Self
 
 import aiohttp
 
@@ -34,7 +34,7 @@ class Request:
             return data
 
     @classmethod
-    def football(cls, parser, date: datetime) -> Self:
+    def football(cls, parser, date: datetime):
         return cls(
             parser=parser,
             info_url=f'https://api.sofascore.com/api/v1/sport/football/scheduled-events/{cls.format_date(date)}',
@@ -43,7 +43,7 @@ class Request:
         )
 
     @classmethod
-    def tennis(cls, parser, date: datetime) -> Self:
+    def tennis(cls, parser, date: datetime):
         return cls(
             parser=parser,
             info_url=f'https://api.sofascore.com/api/v1/sport/football/scheduled-events/{cls.format_date(date)}',
