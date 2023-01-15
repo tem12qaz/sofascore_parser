@@ -159,6 +159,7 @@ class Request:
                     # events.append(event)
                     self.parser.events += 1
             except Exception:
+                print(traceback.format_exc())
                 self.parser.errors += 1
 
         # return events
