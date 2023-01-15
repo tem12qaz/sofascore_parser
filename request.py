@@ -55,6 +55,7 @@ class Request:
     async def make_request(self, url: str) -> dict:
         errors = 0
         while True:
+            print(url)
             try:
                 proxy_auth = aiohttp.BasicAuth('RsxBk6', 'VvyEC')
 
@@ -90,8 +91,6 @@ class Request:
         try:
             self.info = await self.get_info()
             self.odds = await self.get_odds()
-            print('-----')
-
         except ConnectionError:
             return False
         else:
