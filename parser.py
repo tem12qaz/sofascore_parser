@@ -75,7 +75,7 @@ class Parser:
         # print(self.last_recorded_day, ' RECORDED')
         self.days += 1
 
-    async def log(self, additional: str = ''):
+    async def log(self):
         os.system('clear')
         print(
             f'''{Colors.OKGREEN}DAYS:{Colors.ENDC} {self.days}
@@ -115,6 +115,7 @@ class Parser:
     def run(self):
         self.loop.create_task(self.parse_loop())
         try:
+            print('RUN')
             self.loop.run_forever()
         except KeyboardInterrupt:
             self.workbook.close()
