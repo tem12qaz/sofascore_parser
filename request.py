@@ -65,6 +65,7 @@ class Request:
 
             except Exception:
                 if errors == 4:
+                    errors += 1
                     self.parser.request_errors += 1
                     raise ConnectionError
                 await asyncio.sleep(3)
@@ -107,7 +108,6 @@ class Request:
             self.get_or_empty(voices, 'vote', 'vote2'),
             self.get_or_empty(voices, 'vote', 'voteX')
         ).calculate_voices()
-        print('---')
         event = await EventModel.create(
             event_id=str(data['id']),
             day=date.day,
