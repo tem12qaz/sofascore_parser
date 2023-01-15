@@ -3,6 +3,7 @@ import os
 import traceback
 from datetime import datetime, timedelta
 
+import aiohttp
 import xlsxwriter
 
 from db import db_init
@@ -40,6 +41,22 @@ class Parser:
         self.no_odds = 0
         self.no_voices = 0
         self.days = 0
+        self.proxies = [
+            ("168.196.237.191", "9800", "bBDYwg", "5RCpe2"),
+            ("168.196.239.186", "9195", "bBDYwg", "5RCpe2"),
+            ("168.196.238.70", "9970", "bBDYwg", "5RCpe2"),
+        ]
+
+    def get_proxies(self) -> tuple[str, aiohttp.BasicAuth]:
+        proxy_tuple = self.proxies[0]
+        proxy = f'http://{proxy_tuple[0]}:{proxy_tuple[1]}'
+        proxy_auth = aiohttp.BasicAuth(proxy_tuple[2], proxy_tuple[3])
+        self.shift_proxy()
+        return proxy, proxy_auth
+
+    def shift_proxy(self):
+        proxy = self.proxies.pop(0)
+        self.proxies.append(proxy)
 
     def set_football(self):
         self.request_init = Request.football

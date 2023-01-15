@@ -56,13 +56,12 @@ class Request:
         errors = 0
         while True:
             try:
-                proxy_auth = aiohttp.BasicAuth('RsxBk6', 'VvyECT')
-
+                proxy, proxy_auth = self.parser.get_proxies()
                 async with aiohttp.ClientSession() as session:
                     resp = await session.get(
                         url=url,
                         headers=HEADERS,
-                        proxy='http://45.10.250.252:8000',
+                        proxy=proxy,
                         proxy_auth=proxy_auth
                     )
                     resp = await resp.json()
