@@ -88,9 +88,9 @@ class Request:
 
     async def get(self) -> bool:
         try:
-            self.info = await self.get_info()
             print('-----')
 
+            self.info = await self.get_info()
             self.odds = await self.get_odds()
         except ConnectionError:
             return False
