@@ -72,11 +72,11 @@ class Request:
                     self.parser.request_errors += 1
                     raise ConnectionError
                 await asyncio.sleep(3)
+                print('----')
+
                 errors += 1
                 continue
             else:
-                print('----')
-
                 return resp
 
     async def get_info(self) -> dict:
