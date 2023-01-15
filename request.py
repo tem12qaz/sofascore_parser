@@ -8,6 +8,7 @@ import aiohttp
 from config import HEADERS
 from empty import Empty
 from event import Event, EventVoices
+from models import EventModel
 
 
 class Request:
@@ -95,7 +96,7 @@ class Request:
         a, b = map(int, coefficient.split('/'))
         return a/b
 
-    def parse_event(self, data: dict, odds: dict, voices: dict) -> Event | bool:
+    async def parse_event(self, data: dict, odds: dict, voices: dict) -> bool:
         try:
             start_timestamp = self.get_or_empty(data, 'startTimestamp')
             date = datetime.fromtimestamp(start_timestamp)
@@ -107,7 +108,8 @@ class Request:
             self.get_or_empty(voices, 'vote', 'voteX')
         ).calculate_voices()
 
-        event = Event(
+        event = await EventModel.create(
+            event_id=str(data['id']),
             day=date.day,
             month=date.month,
             year=date.year,
@@ -129,11 +131,10 @@ class Request:
             draw_voices_percent=voices.voice_x_percent,
             team_2_voices_percent=voices.voice_2_percent,
         )
+        return True
 
-        return event
-
-    async def parse_json(self) -> list[Event]:
-        events = []
+    async def parse_json(self) -> None:
+        # events = []
         for data in self.info['events']:
             try:
                 odds = self.odds['odds']
@@ -146,11 +147,11 @@ class Request:
                 if not voices:
                     self.parser.no_voices += 1
                     continue
-                event = self.parse_event(data, odds, voices)
+                event = await self.parse_event(data, odds, voices)
                 if event:
-                    events.append(event)
+                    # events.append(event)
                     self.parser.events += 1
             except Exception:
                 self.parser.errors += 1
 
-        return events
+        # return events

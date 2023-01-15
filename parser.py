@@ -6,6 +6,7 @@ import xlsxwriter
 
 from empty import Empty
 from event import Event
+from models import EventModel
 from request import Request
 
 
@@ -57,7 +58,6 @@ class Parser:
     def write_day(self, day: list[Event]):
         row_num = 1
         for event in day:
-            print(self.log(str(list(event.__dict__.values()))))
             col_num = 0
             for col in tuple(event.__dict__.values()):
                 if type(col) == Empty:
@@ -69,17 +69,17 @@ class Parser:
     async def parse_and_write_day(self, request: Request):
         if not await request.get():
             return
-        self.write_day(await request.parse_json())
-
+        await request.parse_json()
         self.last_recorded_day = Request.format_date(request.date)
         # print(self.last_recorded_day, ' RECORDED')
         self.days += 1
 
-    def log(self, additional: str = ''):
+    async def log(self, additional: str = ''):
         os.system('clear')
         print(
             f'''{Colors.OKGREEN}DAYS:{Colors.ENDC} {self.days}
 {Colors.OKCYAN}EVENTS:{Colors.ENDC} {self.events}
+{Colors.OKCYAN}EVENTS IN BASE:{Colors.ENDC} {await EventModel.all().count()}
               
 {Colors.WARNING}NO_ODDS:{Colors.ENDC} {self.no_odds}
 {Colors.WARNING}NO_VOICES:{Colors.ENDC} {self.no_voices} 
@@ -88,9 +88,6 @@ class Parser:
 {Colors.FAIL}REQUEST_ERRORS:{Colors.ENDC} {self.request_errors}
             
 {self.last_recorded_day} RECORDED
-
-LAST RECORDED INFO:    
-{additional}
 '''
 )
 
@@ -104,7 +101,7 @@ LAST RECORDED INFO:
                     # await asyncio.sleep(0.1)
 
                 while len(asyncio.all_tasks(self.loop)) > 1:
-                    self.log()
+                    await self.log()
                     await asyncio.sleep(1)
         except Exception:
             self.workbook.close()
