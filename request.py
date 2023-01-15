@@ -62,7 +62,7 @@ class Request:
                     resp = await session.get(
                         url=url,
                         headers=HEADERS,
-                        proxy='http://45.10.250.252:8000',
+                        proxy='https://45.10.250.252:8000/',
                         proxy_auth=proxy_auth
                     )
                     resp = await resp.json()
@@ -70,6 +70,8 @@ class Request:
             except Exception:
                 if errors == 4:
                     self.parser.request_errors += 1
+                    print(traceback.format_exc())
+                    input()
                     raise ConnectionError
                 await asyncio.sleep(3)
                 errors += 1
