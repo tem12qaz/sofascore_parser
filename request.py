@@ -11,6 +11,10 @@ from event import Event, EventVoices
 from models import EventModel
 
 
+class NoOdds(Exception):
+    pass
+
+
 class Request:
     def __init__(self, parser, info_url: str, odds_url: str, date: datetime):
         self.parser = parser
@@ -97,9 +101,12 @@ class Request:
 
     @staticmethod
     def parse_odds(odds: dict, index: int):
-        coefficient = odds['choices'][index]['fractionalValue']
-        a, b = map(int, coefficient.split('/'))
-        return a/b
+        try:
+            coefficient = odds['choices'][index]['fractionalValue']
+            a, b = map(int, coefficient.split('/'))
+            return a/b
+        except ValueError:
+            raise NoOdds
 
     async def parse_event(self, data: dict, odds: dict, voices: dict) -> bool:
         try:
@@ -158,6 +165,9 @@ class Request:
                 if event:
                     # events.append(event)
                     self.parser.events += 1
+            except NoOdds:
+                self.parser.no_odds += 1
+                continue
             except Exception:
                 print(traceback.format_exc())
                 self.parser.errors += 1

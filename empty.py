@@ -9,7 +9,7 @@ class Empty:
         return False
 
     def __int__(self):
-        return self
+        return -1
 
     def __float__(self):
-        return self
+        return -1.0
