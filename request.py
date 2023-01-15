@@ -107,7 +107,7 @@ class Request:
             self.get_or_empty(voices, 'vote', 'vote2'),
             self.get_or_empty(voices, 'vote', 'voteX')
         ).calculate_voices()
-
+        print('---')
         event = await EventModel.create(
             event_id=str(data['id']),
             day=date.day,
