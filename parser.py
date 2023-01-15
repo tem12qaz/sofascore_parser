@@ -44,7 +44,7 @@ class Parser:
     def write_day(self, day: list[Event]):
         row_num = 1
         for event in day:
-            print(event.__dict__.values())
+            print(event.__dict__.values()[0])
             col_num = 0
             for col in tuple(event.__dict__.values()):
                 if type(col) == Empty:
@@ -62,6 +62,18 @@ class Parser:
         # print(self.last_recorded_day, ' RECORDED')
         self.days += 1
 
+    def log(self):
+        print(
+            f'''EVENTS: {self.events} NO_ODDS: {self.no_odds} NO_ODDS: {self.no_voices} ERRORS: {self.errors} REQUEST_ERRORS: {self.request_errors} DAYS: {self.days}
+            
+            {self.last_recorded_day} RECORDED
+            
+            
+            '''
+
+
+        )
+
     async def parse_loop(self):
         try:
             while self.last_recorded_day > self.last_day_str:
@@ -72,7 +84,7 @@ class Parser:
                     # await asyncio.sleep(0.1)
 
                 while len(asyncio.all_tasks(self.loop)) > 1:
-                    print(f'EVENTS: {self.events} NO_ODDS: {self.no_odds} NO_ODDS: {self.no_voices} ERRORS: {self.errors} REQUEST_ERRORS: {self.request_errors}\r', flush=True)
+                    self.log()
                     await asyncio.sleep(1)
         except Exception:
             self.workbook.close()
