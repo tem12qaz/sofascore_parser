@@ -58,7 +58,7 @@ class Request:
             print('----')
 
             try:
-                proxy_auth = aiohttp.BasicAuth('RsxBk6', 'VvyEC')
+                proxy_auth = aiohttp.BasicAuth('RsxBk6', 'VvyECT')
 
                 async with aiohttp.ClientSession() as session:
                     resp = await session.get(
