@@ -140,18 +140,17 @@ class Request:
 
                 odds = odds.get(str(data['id']))
                 if not odds:
-                    print('NO ODDS')
+                    self.parser.no_odds += 1
                     continue
                 voices = await self.get_voices(data['id'])
                 if not voices:
-                    print('NO VOICES')
+                    self.parser.no_voices += 1
                     continue
                 event = self.parse_event(data, odds, voices)
                 if event:
                     events.append(event)
                     self.parser.events += 1
             except Exception:
-                'PARSE ERROR'
                 self.parser.errors += 1
 
         return events

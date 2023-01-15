@@ -21,6 +21,9 @@ class Parser:
         self.errors = 0
         self.events = 0
         self.request_errors = 0
+        self.no_odds = 0
+        self.no_voices = 0
+        self.days = 0
 
     def set_football(self):
         self.request_init = Request.football
@@ -52,13 +55,12 @@ class Parser:
 
     async def parse_and_write_day(self, request: Request):
         if not await request.get():
-            print('REQUEST ERROR')
             return
         self.write_day(await request.parse_json())
-        print('-----')
 
         self.last_recorded_day = Request.format_date(request.date)
-        print(self.last_recorded_day, ' RECORDER')
+        # print(self.last_recorded_day, ' RECORDED')
+        self.days += 1
 
     async def parse_loop(self):
         try:
@@ -70,7 +72,7 @@ class Parser:
                     # await asyncio.sleep(0.1)
 
                 while len(asyncio.all_tasks(self.loop)) > 1:
-                    print(f'EVENTS: {self.events}  ERRORS: {self.errors}  REQUEST_ERRORS: {self.request_errors}')
+                    print(f'EVENTS: {self.events} NO_ODDS: {self.no_odds} NO_ODDS: {self.no_voices} ERRORS: {self.errors} REQUEST_ERRORS: {self.request_errors}\r', flush=True)
                     await asyncio.sleep(1)
         except Exception:
             self.workbook.close()
