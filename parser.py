@@ -79,15 +79,15 @@ class Parser:
         os.system('clear')
         print(
             f'''{Colors.OKGREEN}DAYS:{Colors.ENDC} {self.days}
-                {Colors.OKCYAN}EVENTS:{Colors.ENDC} {self.events}
+{Colors.OKCYAN}EVENTS:{Colors.ENDC} {self.events}
               
-                {Colors.WARNING}NO_ODDS:{Colors.ENDC} {self.no_odds}
-                {Colors.WARNING}NO_VOICES:{Colors.ENDC} {self.no_voices} 
+{Colors.WARNING}NO_ODDS:{Colors.ENDC} {self.no_odds}
+{Colors.WARNING}NO_VOICES:{Colors.ENDC} {self.no_voices} 
                 
-                {Colors.FAIL}ERRORS:{Colors.ENDC} {self.errors}
-                {Colors.FAIL}REQUEST_ERRORS:{Colors.ENDC} {self.request_errors}
+{Colors.FAIL}ERRORS:{Colors.ENDC} {self.errors}
+Colors.FAIL}REQUEST_ERRORS:{Colors.ENDC} {self.request_errors}
             
-{Colors.OKBLUE}{self.last_recorded_day} RECORDED{Colors.ENDC}
+{self.last_recorded_day} RECORDED
 
 LAST RECORDED INFO:    
 {additional}
