@@ -1,5 +1,6 @@
 import asyncio
 import os
+import traceback
 from datetime import datetime, timedelta
 
 import xlsxwriter
@@ -105,6 +106,7 @@ class Parser:
                     await self.log()
                     await asyncio.sleep(1)
         except Exception:
+            print(traceback.format_exc())
             self.workbook.close()
 
     def previous_day(self):
