@@ -75,8 +75,6 @@ class Request:
                 errors += 1
                 continue
             else:
-                print('-----')
-
                 return resp
 
     async def get_info(self) -> dict:
@@ -91,6 +89,8 @@ class Request:
     async def get(self) -> bool:
         try:
             self.info = await self.get_info()
+            print('-----')
+
             self.odds = await self.get_odds()
         except ConnectionError:
             return False
