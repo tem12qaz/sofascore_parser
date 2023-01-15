@@ -4,7 +4,7 @@ from tortoise.models import Model
 
 class EventModel(Model):
     id = fields.IntField(pk=True)
-    event_id = fields.CharField(16)
+    event_id = fields.CharField(16, index=True)
     day = fields.IntField()
     month = fields.IntField()
     year = fields.IntField()
