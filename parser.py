@@ -9,6 +9,18 @@ from event import Event
 from request import Request
 
 
+class Colors:
+    HEADER = '\033[95m'
+    OKBLUE = '\033[94m'
+    OKCYAN = '\033[96m'
+    OKGREEN = '\033[92m'
+    WARNING = '\033[93m'
+    FAIL = '\033[91m'
+    ENDC = '\033[0m'
+    BOLD = '\033[1m'
+    UNDERLINE = '\033[4m'
+
+
 class Parser:
     def __init__(self, last_day_str: str = '2015-06-01'):
         self.datetime = datetime.now()
@@ -66,7 +78,14 @@ class Parser:
     def log(self, additional: str = ''):
         os.system('clear')
         print(
-            f'''DAYS: {self.days} EVENTS: {self.events} NO_ODDS: {self.no_odds} NO_VOICES: {self.no_voices} ERRORS: {self.errors} REQUEST_ERRORS: {self.request_errors}
+            f'''DAYS: {self.days}
+                EVENTS: {self.events}
+              
+                NO_ODDS: {self.no_odds}
+                NO_VOICES: {self.no_voices} 
+                
+                {Colors.FAIL}ERRORS: {self.errors}{Colors.ENDC}
+                REQUEST_ERRORS: {self.request_errors}
             
 {self.last_recorded_day} RECORDED
 
