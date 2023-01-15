@@ -78,16 +78,16 @@ class Parser:
     def log(self, additional: str = ''):
         os.system('clear')
         print(
-            f'''DAYS: {self.days}
-                EVENTS: {self.events}
+            f'''{Colors.OKGREEN}DAYS:{Colors.ENDC} {self.days}
+                {Colors.OKCYAN}EVENTS:{Colors.ENDC} {self.events}
               
-                NO_ODDS: {self.no_odds}
-                NO_VOICES: {self.no_voices} 
+                {Colors.WARNING}NO_ODDS:{Colors.ENDC} {self.no_odds}
+                {Colors.WARNING}NO_VOICES:{Colors.ENDC} {self.no_voices} 
                 
-                {Colors.FAIL}ERRORS: {self.errors}{Colors.ENDC}
-                REQUEST_ERRORS: {self.request_errors}
+                {Colors.FAIL}ERRORS:{Colors.ENDC} {self.errors}
+                {Colors.FAIL}REQUEST_ERRORS:{Colors.ENDC} {self.request_errors}
             
-{self.last_recorded_day} RECORDED
+{Colors.OKBLUE}{self.last_recorded_day} RECORDED{Colors.ENDC}
 
 LAST RECORDED INFO:    
 {additional}
