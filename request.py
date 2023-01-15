@@ -56,6 +56,7 @@ class Request:
         errors = 0
         while True:
             print(url)
+
             try:
                 proxy_auth = aiohttp.BasicAuth('RsxBk6', 'VvyEC')
 
