@@ -65,10 +65,11 @@ class Request:
 
             except Exception:
                 if errors == 4:
-                    errors += 1
                     self.parser.request_errors += 1
                     raise ConnectionError
                 await asyncio.sleep(3)
+                errors += 1
+
                 continue
             else:
                 return resp
