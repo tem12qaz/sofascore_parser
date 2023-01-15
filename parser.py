@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 import xlsxwriter
 
+from db import db_init
 from empty import Empty
 from event import Event
 from models import EventModel
@@ -113,6 +114,7 @@ class Parser:
         self.datetime -= timedelta(days=1)
 
     def run(self):
+        self.loop.create_task(db_init())
         self.loop.create_task(self.parse_loop())
         try:
             print('RUN')
