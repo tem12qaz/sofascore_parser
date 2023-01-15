@@ -77,7 +77,7 @@ class Parser:
         self.days += 1
 
     async def log(self):
-        os.system('clear')
+        # os.system('clear')
         print(
             f'''{Colors.OKGREEN}DAYS:{Colors.ENDC} {self.days}
 {Colors.OKCYAN}EVENTS:{Colors.ENDC} {self.events}

@@ -71,7 +71,6 @@ class Request:
                 if errors == 4:
                     self.parser.request_errors += 1
                     print(traceback.format_exc())
-                    input()
                     raise ConnectionError
                 await asyncio.sleep(3)
                 errors += 1
