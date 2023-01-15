@@ -85,7 +85,7 @@ class Parser:
 {Colors.WARNING}NO_VOICES:{Colors.ENDC} {self.no_voices} 
                 
 {Colors.FAIL}ERRORS:{Colors.ENDC} {self.errors}
-Colors.FAIL}REQUEST_ERRORS:{Colors.ENDC} {self.request_errors}
+{Colors.FAIL}REQUEST_ERRORS:{Colors.ENDC} {self.request_errors}
             
 {self.last_recorded_day} RECORDED
 
