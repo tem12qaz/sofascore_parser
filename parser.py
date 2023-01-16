@@ -10,7 +10,7 @@ from tortoise.exceptions import DoesNotExist
 from db import db_init
 from empty import Empty
 from event import Event
-from models import EventModel
+from models import EventModel, Tennis
 from request import Request
 
 
@@ -43,6 +43,8 @@ class Parser:
         self.no_voices = 0
         self.days = 0
         self.event_id = 0
+        self.model = None
+
         self.proxies = [
             ("168.196.237.191", "9800", "bBDYwg", "5RCpe2"),
             ("168.196.239.186", "9195", "bBDYwg", "5RCpe2"),
@@ -63,14 +65,13 @@ class Parser:
     def set_football(self):
         self.request_init = Request.football
         self.sport = 'football'
+        self.model = EventModel
 
-    @classmethod
-    def test(cls):
-        return cls(last_day_str='11')
 
     def set_tennis(self):
         self.request_init = Request.tennis
         self.sport = 'tennis'
+        self.model = Tennis
 
     def init_request(self):
         request: Request = self.request_init(self.datetime)
@@ -119,7 +120,7 @@ class Parser:
         print(
             f'''{Colors.OKGREEN}DAYS:{Colors.ENDC} {self.days}
 {Colors.OKCYAN}EVENTS:{Colors.ENDC} {self.events}
-{Colors.OKCYAN}EVENTS IN BASE:{Colors.ENDC} {await EventModel.all().count()}
+{Colors.OKCYAN}EVENTS IN BASE:{Colors.ENDC} {await self.model.all().count()}
               
 {Colors.WARNING}NO_ODDS:{Colors.ENDC} {self.no_odds}
 {Colors.WARNING}NO_VOICES:{Colors.ENDC} {self.no_voices} 
