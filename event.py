@@ -8,15 +8,16 @@ from empty import Empty
 class EventVoices:
     voice_1: int
     voice_2: int
-    voice_x: int
+    voice_x: Optional[int] = None
     voice_1_percent: Optional[float] = None
     voice_2_percent: Optional[float] = None
     voice_x_percent: Optional[float] = None
 
     def calculate_voices(self):
-        all_voices = self.voice_x + self.voice_1 + self.voice_2
+        all_voices = (self.voice_x if self.voice_x else 0) + self.voice_1 + self.voice_2
         percent = all_voices / 100
-        self.voice_x_percent = round(self.voice_x / percent, 2)
+        if self.voice_x:
+            self.voice_x_percent = round(self.voice_x / percent, 2)
         self.voice_1_percent = round(self.voice_1 / percent, 2)
         self.voice_2_percent = round(self.voice_2 / percent, 2)
         return self

@@ -8,7 +8,7 @@ import aiohttp
 from config import HEADERS
 from empty import Empty
 from event import Event, EventVoices
-from models import EventModel
+from models import EventModel, Tennis
 
 
 class NoOdds(Exception):
@@ -40,21 +40,26 @@ class Request:
 
     @classmethod
     def football(cls, parser, date: datetime):
-        return cls(
+
+        obj = cls(
             parser=parser,
             info_url=f'https://api.sofascore.com/api/v1/sport/football/scheduled-events/{cls.format_date(date)}',
             odds_url=f'https://api.sofascore.com/api/v1/sport/football/odds/1/{cls.format_date(date)}',
             date=date
         )
+        obj.parse_event = obj.parse_event_football
+        return obj
 
     @classmethod
     def tennis(cls, parser, date: datetime):
-        return cls(
+        obj = cls(
             parser=parser,
-            info_url=f'https://api.sofascore.com/api/v1/sport/football/scheduled-events/{cls.format_date(date)}',
-            odds_url=f'https://api.sofascore.com/api/v1/sport/football/odds/1/{cls.format_date(date)}',
+            info_url=f'https://api.sofascore.com/api/v1/sport/tennis/scheduled-events/{cls.format_date(date)}',
+            odds_url=f'https://api.sofascore.com/api/v1/sport/tennis/odds/1/{cls.format_date(date)}',
             date=date
         )
+        obj.parse_event = obj.parse_event_tennis
+        return obj
 
     async def make_request(self, url: str) -> dict:
         errors = 0
@@ -108,7 +113,7 @@ class Request:
         except ValueError:
             raise NoOdds
 
-    async def parse_event(self, data: dict, odds: dict, voices: dict) -> bool:
+    async def parse_event_tennis(self, data: dict, odds: dict, voices: dict) -> bool:
         try:
             start_timestamp = self.get_or_empty(data, 'startTimestamp')
             date = datetime.fromtimestamp(start_timestamp)
@@ -118,6 +123,38 @@ class Request:
             self.get_or_empty(voices, 'vote', 'vote1'),
             self.get_or_empty(voices, 'vote', 'vote2'),
             self.get_or_empty(voices, 'vote', 'voteX')
+        ).calculate_voices()
+        event = await Tennis.create(
+            event_id=str(data['id']),
+            day=date.day,
+            month=date.month,
+            year=date.year,
+            start=date.time().strftime('%H:%M'),
+            country=self.get_or_empty(data, 'tournament', 'category', 'name'),
+            tournament=self.get_or_empty(data, 'tournament', 'name'),
+            tour=self.get_or_empty(data, 'roundInfo', 'name'),
+            team_1=self.get_or_empty(data, 'homeTeam', 'name'),
+            team_2=self.get_or_empty(data, 'awayTeam', 'name'),
+            team_1_coefficient=self.parse_odds(odds, 0),
+            team_2_coefficient=self.parse_odds(odds, 1),
+            team_1_goals=self.get_or_empty(data, 'homeScore', 'current'),
+            team_2_goals=self.get_or_empty(data, 'awayScore', 'current'),
+            team_1_voices=voices.voice_1,
+            team_2_voices=voices.voice_2,
+            team_1_voices_percent=voices.voice_1_percent,
+            team_2_voices_percent=voices.voice_2_percent,
+        )
+        return True
+
+    async def parse_event_football(self, data: dict, odds: dict, voices: dict) -> bool:
+        try:
+            start_timestamp = self.get_or_empty(data, 'startTimestamp')
+            date = datetime.fromtimestamp(start_timestamp)
+        except (KeyError, ValueError):
+            return False
+        voices = EventVoices(
+            self.get_or_empty(voices, 'vote', 'vote1'),
+            self.get_or_empty(voices, 'vote', 'vote2'),
         ).calculate_voices()
         event = await EventModel.create(
             event_id=str(data['id']),

@@ -34,12 +34,12 @@ async def parse():
         # response = requests.get(f'', headers=headers)
         async with aiohttp.ClientSession() as session:
             resp = await session.get(
-                url=f'https://api.sofascore.com/api/v1/sport/football/scheduled-events/{date_str}',
+                url=f'https://api.sofascore.com/api/v1/sport/tennis/scheduled-events/{date_str}',
                 headers=headers
             )
             resp = await resp.json()
 
-        pprint(resp['events'][0])
+        pprint(resp['events'][5])
         input()
         # time.sleep(0.1)
         date = date - timedelta(days=1)
