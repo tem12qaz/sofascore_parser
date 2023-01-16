@@ -82,7 +82,9 @@ class Parser:
             try:
                 event = await EventModel.get(id=self.event_id)
             except DoesNotExist:
-                print('no_exists')
+                print(f'{self.event_id} not_exist')
+                if self.event_id > 470000:
+                    break
                 self.event_id += 1
                 continue
             col_num = 0

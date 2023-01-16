@@ -15,4 +15,8 @@ HEADERS = {
     'user-agent': 'Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/108.0.0.0 Mobile Safari/537.36',
 }
 
-database_uri = ''
+IP = '94.228.118.204'
+PG_PASSWORD = 'H816gxC4bS9RzpIRShRI'
+PG_USER = 'myuser'
+PG_DATABASE = 'sofascore'
+database_uri = f'postgres://{PG_USER}:{PG_PASSWORD}@{IP}/{PG_DATABASE}'
