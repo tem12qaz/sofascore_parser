@@ -88,7 +88,7 @@ class Parser:
                 self.event_id += 1
                 continue
             col_num = 0
-            row = (event.day, event.month, event.day, event.start, event.country,
+            row = (event.day, event.month, event.year, event.start, event.country,
                    event.tournament, event.tour, event.team_1, event.team_2,
                    event.team_1_coefficient, event.draw_coefficient,
                    event.team_2_coefficient, event.team_1_goals, event.team_2_goals,
