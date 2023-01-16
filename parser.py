@@ -5,6 +5,7 @@ from datetime import datetime, timedelta
 
 import aiohttp
 import xlsxwriter
+from tortoise.exceptions import DoesNotExist
 
 from db import db_init
 from empty import Empty
@@ -41,7 +42,7 @@ class Parser:
         self.no_odds = 0
         self.no_voices = 0
         self.days = 0
-        self.recorded = 0
+        self.event_id = 0
         self.proxies = [
             ("168.196.237.191", "9800", "bBDYwg", "5RCpe2"),
             ("168.196.239.186", "9195", "bBDYwg", "5RCpe2"),
@@ -75,16 +76,22 @@ class Parser:
         request: Request = self.request_init(self.datetime)
         return request
 
-    def write_day(self, day: list[EventModel]):
+    async def write(self):
         row_num = 1
-        for event in day:
+        while True:
+            try:
+                event = await EventModel.get(id=self.event_id)
+            except DoesNotExist:
+                self.event_id += 1
+                continue
             col_num = 0
             for col in tuple(event.__dict__.values()):
                 self.worksheet.write(row_num, col_num, col)
                 col_num += 1
             row_num += 1
-            print(self.recorded)
-            self.recorded += 1
+            print(self.event_id)
+            self.event_id += 1
+
 
     async def parse_and_write_day(self, request: Request):
         if not await request.get():
@@ -146,13 +153,9 @@ class Parser:
         self.workbook = xlsxwriter.Workbook(f'{self.sport}.xlsx')
         self.worksheet = self.workbook.add_worksheet("Sheet")
 
-    async def write_all(self):
-        events = await EventModel.all()
-        self.write_day(events)
-
     def run_write(self):
         self.loop.create_task(db_init())
-        self.loop.create_task(self.write_all())
+        self.loop.create_task(self.write())
         self.loop.run_forever()
 
 
