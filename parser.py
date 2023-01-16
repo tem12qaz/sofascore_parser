@@ -41,6 +41,7 @@ class Parser:
         self.no_odds = 0
         self.no_voices = 0
         self.days = 0
+        self.recorded = 0
         self.proxies = [
             ("168.196.237.191", "9800", "bBDYwg", "5RCpe2"),
             ("168.196.239.186", "9195", "bBDYwg", "5RCpe2"),
@@ -74,16 +75,16 @@ class Parser:
         request: Request = self.request_init(self.datetime)
         return request
 
-    def write_day(self, day: list[Event]):
+    def write_day(self, day: list[EventModel]):
         row_num = 1
         for event in day:
             col_num = 0
             for col in tuple(event.__dict__.values()):
-                if type(col) == Empty:
-                    col = ''
                 self.worksheet.write(row_num, col_num, col)
                 col_num += 1
             row_num += 1
+            print(self.recorded)
+            self.recorded += 1
 
     async def parse_and_write_day(self, request: Request):
         if not await request.get():
@@ -144,5 +145,15 @@ class Parser:
     def init_workbook(self):
         self.workbook = xlsxwriter.Workbook(f'{self.sport}.xlsx')
         self.worksheet = self.workbook.add_worksheet("Sheet")
+
+    async def write_all(self):
+        events = await EventModel.all()
+        self.write_day(events)
+
+    def run_write(self):
+        self.loop.create_task(self.write_all())
+        self.loop.run_forever()
+
+
 
 
