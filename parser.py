@@ -151,6 +151,7 @@ class Parser:
         self.write_day(events)
 
     def run_write(self):
+        self.loop.create_task(db_init())
         self.loop.create_task(self.write_all())
         self.loop.run_forever()
 
