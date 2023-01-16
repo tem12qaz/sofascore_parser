@@ -82,6 +82,7 @@ class Parser:
             try:
                 event = await EventModel.get(id=self.event_id)
             except DoesNotExist:
+                print('no_exists')
                 self.event_id += 1
                 continue
             col_num = 0
@@ -91,6 +92,9 @@ class Parser:
             row_num += 1
             print(self.event_id)
             self.event_id += 1
+
+        self.workbook.close()
+        self.loop.close()
 
 
     async def parse_and_write_day(self, request: Request):
@@ -157,6 +161,7 @@ class Parser:
         self.loop.create_task(db_init())
         self.loop.create_task(self.write())
         self.loop.run_forever()
+        return
 
 
 
