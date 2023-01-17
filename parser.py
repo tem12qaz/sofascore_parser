@@ -81,10 +81,10 @@ class Parser:
         row_num = 1
         while True:
             try:
-                event = await EventModel.get(id=self.event_id)
+                event = await self.model.get(id=self.event_id)
             except DoesNotExist:
                 print(f'{self.event_id} not_exist')
-                if self.event_id > 470000:
+                if self.event_id > 65800:
                     break
                 self.event_id += 1
                 continue
