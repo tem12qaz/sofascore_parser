@@ -4,4 +4,4 @@ if __name__ == "__main__":
     parser = Parser()
     parser.set_tennis()
     parser.init_workbook()
-    parser.run()
+    parser.run_write()

@@ -89,13 +89,24 @@ class Parser:
                 self.event_id += 1
                 continue
             col_num = 0
-            row = (event.day, event.month, event.year, event.start, event.country,
-                   event.tournament, event.tour, event.team_1, event.team_2,
-                   event.team_1_coefficient, event.draw_coefficient,
-                   event.team_2_coefficient, event.team_1_goals, event.team_2_goals,
-                   event.team_1_voices, event.draw_voices, event.team_2_voices,
-                   event.team_1_voices_percent, event.draw_voices_percent,
-                   event.team_2_voices_percent)
+            if self.sport == 'tennis':
+                row = (event.day, event.month, event.year, event.start, event.country,
+                       event.tournament, event.tour, event.team_1, event.team_2,
+                       event.team_1_coefficient,
+                       event.team_2_coefficient, event.team_1_goals, event.team_2_goals,
+                       event.team_1_voices, event.team_2_voices,
+                       event.team_1_voices_percent,
+                       event.team_2_voices_percent)
+            elif self.sport == 'football':
+                row = (event.day, event.month, event.year, event.start, event.country,
+                       event.tournament, event.tour, event.team_1, event.team_2,
+                       event.team_1_coefficient, event.draw_coefficient,
+                       event.team_2_coefficient, event.team_1_goals, event.team_2_goals,
+                       event.team_1_voices, event.draw_voices, event.team_2_voices,
+                       event.team_1_voices_percent, event.draw_voices_percent,
+                       event.team_2_voices_percent)
+            else:
+                raise ValueError('only tennis or football')
             for col in row:
                 self.worksheet.write(row_num, col_num, col)
                 col_num += 1
