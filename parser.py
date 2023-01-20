@@ -87,7 +87,7 @@ class Parser:
                     break
                 self.event_id += 1
                 continue
-            request: Request = self.request_init()
+            request: Request = self.request_init(self)
             self.loop.create_task(request.update_tennis(event))
 
             while len(asyncio.all_tasks(self.loop)) > 11:
