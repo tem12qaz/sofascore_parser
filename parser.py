@@ -89,6 +89,7 @@ class Parser:
                 continue
             request: Request = self.request_init(self)
             self.loop.create_task(request.update_tennis(event))
+            print('------')
 
             while len(asyncio.all_tasks(self.loop)) > 11:
                 await asyncio.sleep(1)
