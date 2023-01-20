@@ -95,6 +95,22 @@ class Request:
     async def get_voices(self, event_id: int) -> dict:
         return await self.make_request(f'https://api.sofascore.com/api/v1/event/{event_id}/votes')
 
+    async def get_sets_times(self, event_id: int) -> dict:
+        return await self.make_request(f'https://api.sofascore.com/api/v1/event/{event_id}')
+
+    @staticmethod
+    def format_time(timestamp):
+        hour_str = ''
+        minute_str = ''
+        time = datetime.fromtimestamp(timestamp)
+        if time.hour:
+            hour_str = f'{time.hour}h'
+
+        if time.minute:
+            minute_str = f'{time.minute}m'
+
+        return hour_str + ' ' + minute_str
+
     async def get(self) -> bool:
         try:
             self.info = await self.get_info()
@@ -103,6 +119,84 @@ class Request:
             return False
         else:
             return True
+
+    @classmethod
+    def parse_sets_times(cls, data: dict):
+        result = {}
+        scores = {}
+        times = {}
+        ranks = {}
+        set_score_label = 'team_{team}_set_{set}'
+        team_score_key_in_dict = ('homeScore', 'awayScore')
+        set_key_in_dict = 'period{set}'
+        team_set_break_score_key_in_dict = 'period{set}TieBreak'
+        set_break_score_label = 'team_{team}_set_{set}_break'
+        set_time_label = 'set_{set}_time'
+        full_time = 0
+
+        try:
+            team_1_rank = data['homeTeam']['ranking']
+        except KeyError:
+            pass
+        else:
+            ranks['team_1_rank'] = team_1_rank
+
+        try:
+            team_2_rank = data['awayTeam']['ranking']
+        except KeyError:
+            pass
+        else:
+            ranks['team_2_rank'] = team_2_rank
+
+        try:
+            status = data['status']['description'] + ' ' + data['status']['type']
+        except KeyError:
+            pass
+        else:
+            result['status'] = status
+
+        for set_ in range(1, 6):
+            try:
+                set_time = data['time'][set_key_in_dict.format(set=set_)]
+            except KeyError:
+                break
+            else:
+                times[set_time_label.format(set=set_)] = cls.format_time(set_time)
+                full_time += set_time
+            for team in (1, 3):
+                try:
+                    team_set_score = data[team_score_key_in_dict[team-1]][set_key_in_dict.format(set=set_)]
+                except KeyError:
+                    break
+                else:
+                    scores[set_score_label.format(team=team, set=set_)] = team_set_score
+
+                try:
+                    team_set_score_break = \
+                        data[team_score_key_in_dict[team - 1]][team_set_break_score_key_in_dict.format(set=set_)]
+                except KeyError:
+                    continue
+                else:
+                    scores[set_break_score_label.format(team=team, set=set_)] = team_set_score_break
+        times['time'] = cls.format_time(full_time)
+        result.update(scores)
+        result.update(ranks)
+        result.update(times)
+        return result
+
+    @staticmethod
+    async def update_coefficients(event: Tennis | EventModel):
+        event.team_1_coefficient += 1
+        event.team_2_coefficient += 1
+        if type(event) == EventModel:
+            event.draw_coefficient += 1
+
+        await event.save()
+
+    async def update_tennis(self, event: Tennis):
+        data = self.parse_sets_times(await self.get_sets_times(event.event_id))
+        await self.update_coefficients(event)
+        await event.update_from_dict(data)
 
     @staticmethod
     def parse_odds(odds: dict, index: int):

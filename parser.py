@@ -77,6 +77,22 @@ class Parser:
         request: Request = self.request_init(self.datetime)
         return request
 
+    async def update_info_tennis(self):
+        while True:
+            try:
+                event = await self.model.get(id=self.event_id)
+            except DoesNotExist:
+                print(f'{self.event_id} not_exist')
+                if self.event_id > 65800:
+                    break
+                self.event_id += 1
+                continue
+            request: Request = self.request_init(self.datetime)
+            self.loop.create_task(request.update_tennis(event))
+
+            while len(asyncio.all_tasks(self.loop)) > 11:
+                await asyncio.sleep(1)
+
     async def write(self):
         row_num = 1
         while True:
@@ -183,6 +199,12 @@ class Parser:
         self.loop.create_task(self.write())
         self.loop.run_forever()
         return
+
+    def run_update_tennis(self):
+        self.loop.create_task(db_init())
+        self.loop.create_task(self.update_info_tennis())
+        self.loop.run_forever()
+
 
 
 
