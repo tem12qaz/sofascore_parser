@@ -107,7 +107,7 @@ class Request:
         minute_str = ''
         time = datetime.fromtimestamp(timestamp)
         if time.hour:
-            hour_str = f'{time.hour}h'
+            hour_str = f'{time.hour - 3}h'
 
         if time.minute:
             minute_str = f'{time.minute}m'
