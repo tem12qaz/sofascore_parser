@@ -167,7 +167,7 @@ class Request:
             else:
                 times[set_time_label.format(set=set_)] = cls.format_time(set_time)
                 full_time += set_time
-            for team in (1, 3):
+            for team in (1, 2):
                 try:
                     team_set_score = data[team_score_key_in_dict[team-1]][set_key_in_dict.format(set=set_)]
                 except KeyError:
