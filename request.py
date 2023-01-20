@@ -200,8 +200,9 @@ class Request:
     async def update_tennis(self, event: Tennis):
         data = self.parse_sets_times(await self.get_sets_times(event.event_id))
         print(data)
-        await self.update_coefficients(event)
+        # await self.update_coefficients(event)
         await event.update_from_dict(data)
+        await event.save()
         print(f'id{event.id} ok')
 
     @staticmethod
