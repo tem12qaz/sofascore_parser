@@ -125,6 +125,7 @@ class Request:
 
     @classmethod
     def parse_sets_times(cls, data: dict):
+        print(data)
         result = {}
         scores = {}
         times = {}
