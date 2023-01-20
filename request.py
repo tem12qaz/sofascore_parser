@@ -200,6 +200,7 @@ class Request:
         data = self.parse_sets_times(await self.get_sets_times(event.event_id))
         await self.update_coefficients(event)
         await event.update_from_dict(data)
+        print(f'id{event.event_id} ready')
 
     @staticmethod
     def parse_odds(odds: dict, index: int):
