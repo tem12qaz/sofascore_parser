@@ -79,6 +79,7 @@ class Parser:
 
     async def update_info_tennis(self):
         while True:
+            self.event_id += 1
             try:
                 event = await self.model.get(id=self.event_id)
             except DoesNotExist:
