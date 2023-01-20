@@ -39,23 +39,26 @@ class Request:
             return data
 
     @classmethod
-    def football(cls, parser, date: datetime):
-
+    def football(cls, parser, date: datetime = None, datetime_str: str = ''):
+        if date:
+            datetime_str = cls.format_date(date)
         obj = cls(
             parser=parser,
-            info_url=f'https://api.sofascore.com/api/v1/sport/football/scheduled-events/{cls.format_date(date)}',
-            odds_url=f'https://api.sofascore.com/api/v1/sport/football/odds/1/{cls.format_date(date)}',
+            info_url=f'https://api.sofascore.com/api/v1/sport/football/scheduled-events/{datetime_str}',
+            odds_url=f'https://api.sofascore.com/api/v1/sport/football/odds/1/{datetime_str}',
             date=date
         )
         obj.parse_event = obj.parse_event_football
         return obj
 
     @classmethod
-    def tennis(cls, parser, date: datetime):
+    def tennis(cls, parser, date: datetime = None, datetime_str: str = ''):
+        if date:
+            datetime_str = cls.format_date(date)
         obj = cls(
             parser=parser,
-            info_url=f'https://api.sofascore.com/api/v1/sport/tennis/scheduled-events/{cls.format_date(date)}',
-            odds_url=f'https://api.sofascore.com/api/v1/sport/tennis/odds/1/{cls.format_date(date)}',
+            info_url=f'https://api.sofascore.com/api/v1/sport/tennis/scheduled-events/{datetime_str}',
+            odds_url=f'https://api.sofascore.com/api/v1/sport/tennis/odds/1/{datetime_str}',
             date=date
         )
         obj.parse_event = obj.parse_event_tennis
