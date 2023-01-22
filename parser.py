@@ -141,9 +141,8 @@ class Parser:
                 event = await Tennis.get(id=i)
             except DoesNotExist:
                 continue
-            datetime_str = f'{event.year}-{event.month}-{event.day}'
-            print(datetime_str)
-            request: Request = self.request_init(self, datetime_str=datetime_str)
+            date = datetime(event.year, event.month, event.day)
+            request: Request = self.request_init(self, date)
             odds = await request.get_odds()
             event.team_1_coefficient = request.parse_odds(odds, 0)
             event.team_2_coefficient = request.parse_odds(odds, 1)
