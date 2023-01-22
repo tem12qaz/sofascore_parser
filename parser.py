@@ -154,7 +154,22 @@ class Parser:
             await event.save()
             print(i, event.team_1_coefficient, event.team_2_coefficient)
 
-
+    async def add_1_to_coefficient(self):
+        while True:
+            try:
+                event = await self.model.get(id=self.event_id)
+            except DoesNotExist:
+                print(f'{self.event_id} not_exist')
+                if self.event_id > 65800:
+                    break
+                self.event_id += 1
+                continue
+            event.team_1_coefficient += 1
+            event.team_2_coefficient += 1
+            if type(event) == EventModel:
+                event.draw_coefficient += 1
+            await event.save()
+            print(f'id{self.event_id} done')
 
     async def parse_and_write_day(self, request: Request):
         if not await request.get():

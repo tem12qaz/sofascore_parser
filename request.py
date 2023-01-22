@@ -190,15 +190,6 @@ class Request:
         result.update(times)
         return result
 
-    @staticmethod
-    async def add_1_to_coefficients(event: Tennis | EventModel):
-        event.team_1_coefficient += 1
-        event.team_2_coefficient += 1
-        if type(event) == EventModel:
-            event.draw_coefficient += 1
-
-        await event.save()
-
     async def update_tennis(self, event: Tennis):
         data = self.parse_sets_times(await self.get_sets_times(event.event_id))
         print(data)
