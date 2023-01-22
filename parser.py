@@ -110,6 +110,27 @@ class Parser:
             if self.sport == 'tennis':
                 row = (event.day, event.month, event.year, event.start, event.country,
                        event.tournament, event.tour, event.team_1, event.team_2,
+                       event.team_1_rank, event.team_2_rank,
+
+                       event.team_1_set_1, event.team_1_set_1_break,
+                       event.team_1_set_2, event.team_1_set_2_break,
+                       event.team_1_set_3, event.team_1_set_3_break,
+                       event.team_1_set_4, event.team_1_set_4_break,
+                       event.team_1_set_5, event.team_1_set_5_break,
+
+                       event.team_2_set_1, event.team_2_set_1_break,
+                       event.team_2_set_2, event.team_2_set_2_break,
+                       event.team_2_set_3, event.team_2_set_3_break,
+                       event.team_2_set_4, event.team_2_set_4_break,
+                       event.team_2_set_5, event.team_2_set_5_break,
+
+                       event.status, event.time,
+                       event.set_1_time,
+                       event.set_2_time,
+                       event.set_3_time,
+                       event.set_4_time,
+                       event.set_5_time,
+
                        event.team_1_coefficient,
                        event.team_2_coefficient, event.team_1_goals, event.team_2_goals,
                        event.team_1_voices, event.team_2_voices,
