@@ -150,7 +150,7 @@ class Parser:
                 continue
 
             event.team_1_coefficient = request.parse_odds(odds, 1)
-            event.team_2_coefficient = request.parse_odds(odds, 1)
+            event.team_2_coefficient = request.parse_odds(odds, 2)
             await event.save()
             print(i, event.team_1_coefficient, event.team_2_coefficient)
 
