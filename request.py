@@ -120,7 +120,6 @@ class Request:
         try:
             self.info = await self.get_info()
             self.odds = await self.get_odds()
-            print(self.odds)
         except ConnectionError:
             return False
         else:

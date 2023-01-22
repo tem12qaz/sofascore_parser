@@ -144,6 +144,8 @@ class Parser:
             date = datetime(event.year, event.month, event.day)
             request: Request = self.request_init(self, date)
             odds = await request.get_odds()
+            print(odds)
+
             event.team_1_coefficient = request.parse_odds(odds, 0)
             event.team_2_coefficient = request.parse_odds(odds, 1)
             await event.save()
