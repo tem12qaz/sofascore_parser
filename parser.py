@@ -143,10 +143,13 @@ class Parser:
                 continue
             date = datetime(event.year, event.month, event.day)
             request: Request = self.request_init(self, date)
-            odds = await request.get_odds()
-            print(odds)
+            try:
+                odds = (await request.get_odds())['odds'][event.event_id]
+            except KeyError:
+                print('NO_ODDS')
+                continue
 
-            event.team_1_coefficient = request.parse_odds(odds, 0)
+            event.team_1_coefficient = request.parse_odds(odds, 1)
             event.team_2_coefficient = request.parse_odds(odds, 1)
             await event.save()
             print(i, event.team_1_coefficient, event.team_2_coefficient)
