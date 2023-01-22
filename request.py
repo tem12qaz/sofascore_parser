@@ -56,6 +56,7 @@ class Request:
     def tennis(cls, parser, date: datetime = None, datetime_str: str = ''):
         if date:
             datetime_str = cls.format_date(date)
+            print(datetime_str)
         obj = cls(
             parser=parser,
             info_url=f'https://api.sofascore.com/api/v1/sport/tennis/scheduled-events/{datetime_str}',
