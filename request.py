@@ -4,6 +4,7 @@ from datetime import datetime
 # from typing import Self
 
 import aiohttp
+from tortoise.exceptions import DoesNotExist
 
 from config import HEADERS
 from empty import Empty
@@ -189,7 +190,7 @@ class Request:
         return result
 
     @staticmethod
-    async def update_coefficients(event: Tennis | EventModel):
+    async def add_1_to_coefficients(event: Tennis | EventModel):
         event.team_1_coefficient += 1
         event.team_2_coefficient += 1
         if type(event) == EventModel:

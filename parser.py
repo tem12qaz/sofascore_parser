@@ -2,6 +2,7 @@ import asyncio
 import os
 import traceback
 from datetime import datetime, timedelta
+from typing import Callable, Coroutine
 
 import aiohttp
 import xlsxwriter
@@ -134,6 +135,20 @@ class Parser:
         self.workbook.close()
         self.loop.close()
 
+    async def refresh_coefficients(self, last_id: int = 400):
+        for i in range(1, last_id):
+            try:
+                event = await Tennis.get(id=i)
+            except DoesNotExist:
+                continue
+            request: Request = self.request_init(datetime_str=f'{event.year}-{event.month}-{event.day}')
+            odds = await request.get_odds()
+            event.team_1_coefficient = request.parse_odds(odds, 0)
+            event.team_2_coefficient = request.parse_odds(odds, 1)
+            await event.save()
+            print(i, event.team_1_coefficient, event.team_2_coefficient)
+
+
 
     async def parse_and_write_day(self, request: Request):
         if not await request.get():
@@ -180,7 +195,7 @@ class Parser:
     def previous_day(self):
         self.datetime -= timedelta(days=1)
 
-    def run(self):
+    def run_main(self):
         self.loop.create_task(db_init())
         self.loop.create_task(self.parse_loop())
         try:
@@ -205,6 +220,13 @@ class Parser:
         self.loop.create_task(db_init())
         self.loop.create_task(self.update_info_tennis())
         self.loop.run_forever()
+
+    def run(self, task: Coroutine):
+        self.init_workbook()
+        self.loop.create_task(db_init())
+        self.loop.create_task(task)
+        self.loop.run_forever()
+
 
 
 
