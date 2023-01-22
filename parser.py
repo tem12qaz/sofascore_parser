@@ -170,6 +170,7 @@ class Parser:
                 event.draw_coefficient += 1
             await event.save()
             print(f'id{self.event_id} done')
+            self.event_id += 1
 
     async def parse_and_write_day(self, request: Request):
         if not await request.get():
